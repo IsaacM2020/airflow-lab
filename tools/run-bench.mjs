@@ -1,0 +1,12 @@
+import { chromium } from 'playwright';
+const base = process.env.BASE || 'http://127.0.0.1:5180';
+const args = process.argv.slice(2).map(Number);
+const browser = await chromium.launch({ channel: 'chrome', headless: true, args: ['--enable-unsafe-webgpu', '--use-angle=metal', '--ignore-gpu-blocklist'] });
+const page = await browser.newPage();
+page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+const seen = new Set();
+page.on('console', (m) => { if (['error','warning'].includes(m.type())) { const t = m.text().slice(0,500); if (!seen.has(t) && !t.includes('404')) { seen.add(t); console.log('[browser]', t);} } });
+await page.goto(base + '/bench.html');
+await page.waitForFunction(() => typeof window.__bench === 'function');
+console.log(JSON.stringify(await page.evaluate((a) => window.__bench(...a), args)));
+await browser.close();
