@@ -524,9 +524,12 @@ export class LBM {
 }
 
 export async function requestGPU(): Promise<GPUDevice> {
-  if (!navigator.gpu) throw new Error('WebGPU is not available in this browser');
+  if (!navigator.gpu) throw new Error('NO_WEBGPU');
   const adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance' });
-  if (!adapter) throw new Error('No GPU adapter found');
+  if (!adapter) throw new Error('NO_ADAPTER');
+  // The two largest solver buffers are about 220 MB each (19 populations x 4 bytes x ~2.9 M cells).
+  const NEED = 240 * 1024 * 1024;
+  if (adapter.limits.maxStorageBufferBindingSize < NEED || adapter.limits.maxBufferSize < NEED) throw new Error('GPU_LIMITS');
   const want: GPUFeatureName[] = [];
   for (const f of ['timestamp-query', 'shader-f16'] as GPUFeatureName[]) if (adapter.features.has(f)) want.push(f);
   return adapter.requestDevice({

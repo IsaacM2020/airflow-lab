@@ -1,5 +1,6 @@
 import { App, type AppState } from './app/app';
 import { buildUI } from './ui/ui';
+import { showFallback } from './ui/fallback';
 
 async function boot() {
   const q = new URLSearchParams(location.search);
@@ -33,5 +34,5 @@ async function boot() {
 }
 boot().catch((e) => {
   console.error(e);
-  document.body.innerHTML = `<pre style="color:#f88;padding:24px;font:14px monospace">${e.message}\n${e.stack ?? ''}</pre>`;
+  showFallback(e instanceof Error ? e : new Error(String(e)));
 });

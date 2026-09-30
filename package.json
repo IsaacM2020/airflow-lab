@@ -16,5 +16,20 @@
   },
   "dependencies": {
     "katex": "^0.18.9"
-  }
+  },
+  "description": "Live 3D Navier-Stokes wind tunnel: airflow through an Airbus A380 and an F1 car, lattice Boltzmann on WebGPU.",
+  "license": "MIT",
+  "author": "Isaac Miranda",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IsaacM2020/airflow-lab.git"
+  },
+  "keywords": [
+    "webgpu",
+    "cfd",
+    "navier-stokes",
+    "lattice-boltzmann",
+    "fluid-simulation",
+    "wind-tunnel"
+  ]
 }
