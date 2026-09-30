@@ -286,6 +286,7 @@ export function buildUI(app: App) {
   );
   const setDrawer = (open: boolean) => {
     drawer.classList.toggle('open', open);
+    hud.classList.toggle('drawer-open', open);
     setPressed($(hud, '#btnMaths'), open);
   };
   $(hud, '#btnMaths').addEventListener('click', () => setDrawer(!drawer.classList.contains('open')));

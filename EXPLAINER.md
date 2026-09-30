@@ -99,7 +99,7 @@ You drag the **angle of attack** slider on the A380 from 3 to 8 degrees.
 | Free-slip floor for the F1 | Moving belt | A moving belt over a one-cell gap pumped air into dead ends and the density hit 6. Real rolling-road tunnels suck the boundary layer off for the same reason, so free-slip is a fair stand-in. |
 | Smagorinsky LES | No turbulence model | Without it, it goes unstable (NaN) at the Re we need. |
 | Measure p_inf upstream | Assume rho = 1 | The mean density drifts about 1%, which looks like Cp = -1.4 everywhere. Found by looking at a screenshot that was all blue. |
-| Discard the start-up transient | Show forces immediately | The first thousand steps are a shock wave ringing around the tunnel. The force during that time is meaningless. |
+| Discard the start-up transient | Show forces immediately | The first 1,800 or so steps are a shock wave ringing around the tunnel. The force during that time is meaningless. |
 | Spin-up behind the loading screen | Start from still air | Otherwise the wake takes 30 seconds to appear. |
 | Adaptive steps per frame | Fixed | Keeps the camera smooth while giving the physics whatever GPU time is left. |
 
@@ -116,7 +116,7 @@ All measured on your M4, in headless Chrome, reported as they came out (`node to
 
 ## 7. Honest limits (say these out loud, your teacher will respect it)
 
-- **Re is about 10,000 times lower than reality.** The grid can't resolve thin boundary layers. So the numbers are trends, not wind-tunnel data.
+- **Re is thousands of times lower than reality** (about 6,000x for the F1, 75,000x for the A380 at default speed). The grid can't resolve thin boundary layers. So the numbers are trends, not wind-tunnel data.
 - **The F1 makes almost no downforce here.** Real downforce needs wings and a 4 cm floor gap working at Re 1e7. Here a wing is about 6 cells across at a chord Re of a few hundred. I tested two resolutions (5 cm and 3.5 cm cells): same answer, so Re is the cause, not the grid. That is why the F1 panel shows drag and side force, not downforce. I would rather show that than a fake number.
 - **A380 drag is about 15 times too high** (Cd 0.46 to 0.53 measured, roughly 0.03 real), so lift-to-drag is 0.5 to 0.9 instead of about 17. Wings are 1 to 2 cells thick, so they behave like blunt plates at low Re. The lift *trend* is right, the drag is inflated.
 - **Incompressible.** Fine for the car, an approximation for an airliner at Mach 0.85.

@@ -164,11 +164,17 @@ td b { color: #fff; }
 .hidden { display: none !important; }
 kbd { font: 600 10.5px var(--font-display); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.06); color: var(--dim); }
 
+/* while the maths drawer is open, keep the dock in the space that is left over */
+.hud.drawer-open .dock-wrap { left: calc((100% - 596px) / 2); max-width: calc(100vw - 620px); }
+@media (max-width: 1500px) { .chip { padding: 9px 11px; font-size: 12px; } .dock { gap: 3px; } }
 @media (max-width: 1100px) {
+  .hud.drawer-open .dock-wrap { display: none; }
+  .drawer { left: 18px; width: auto; }
   .brand p { display: none; }
   .conditions { top: 122px; }
 }
 @media (max-width: 820px) {
+  .drawer { top: 10px; bottom: 10px; left: 10px; right: 10px; }
   .measure { top: auto; bottom: 86px; right: 10px; width: 210px; padding: 10px 12px; }
   .measure .grid { margin: 8px 0 6px; }
   .stat .v { font-size: 20px; }

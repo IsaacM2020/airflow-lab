@@ -7,7 +7,7 @@ export const MATHS_HTML = /* html */ `
 <div class="live">
   <div class="eyebrow">Your simulation right now</div>
   <div class="cells">
-    <div><span>Relaxation time τ</span><b data-live="tau">–</b></div>
+    <div><span>Base relaxation time τ₀</span><b data-live="tau">–</b></div>
     <div><span>Viscosity ν (lattice)</span><b data-live="nu">–</b></div>
     <div><span>Reynolds number Re</span><b data-live="re">–</b></div>
     <div><span>Mach number</span><b data-live="mach">–</b></div>
@@ -48,7 +48,7 @@ export const MATHS_HTML = /* html */ `
   <div class="eq" data-tex="f_i^{\\mathrm{eq}} = w_i\\,\\rho\\left[1 + \\frac{\\mathbf{c}_i\\!\\cdot\\!\\mathbf{u}}{c_s^{2}} + \\frac{(\\mathbf{c}_i\\!\\cdot\\!\\mathbf{u})^{2}}{2c_s^{4}} - \\frac{\\mathbf{u}\\!\\cdot\\!\\mathbf{u}}{2c_s^{2}}\\right],\\qquad w_i=\\tfrac13,\\ \\tfrac1{18},\\ \\tfrac1{36}"></div>
   <p>Density and velocity are just <b>moments</b> (sums) of the packets:</p>
   <div class="eq" data-tex="\\rho=\\sum_{i=0}^{18} f_i,\\qquad \\rho\\,\\mathbf{u}=\\sum_{i=0}^{18} f_i\\,\\mathbf{c}_i"></div>
-  <p>The weights are 1/3 for the rest packet, 1/18 for the 6 axis directions and 1/36 for the 12 diagonals: 1/3 + 6/18 + 12/36 = 1. Every cell does this independently, which is why a GPU can update about 4 million cells per step, ~100 times a second.</p>
+  <p>The weights are 1/3 for the rest packet, 1/18 for the 6 axis directions and 1/36 for the 12 diagonals: 1/3 + 6/18 + 12/36 = 1. Every cell does this independently, which is why a GPU can update about 2.7 to 2.9 million cells per step, 70 to 85 times a second.</p>
 </section>
 
 <section class="step">
@@ -58,7 +58,7 @@ export const MATHS_HTML = /* html */ `
   <div class="eq" data-tex="\\partial_t\\rho+\\nabla\\!\\cdot(\\rho\\mathbf{u})=0,\\qquad \\rho(\\partial_t\\mathbf{u}+\\mathbf{u}\\!\\cdot\\!\\nabla\\mathbf{u}) = -\\nabla p + \\nabla\\!\\cdot\\!\\big[\\rho\\nu(\\nabla\\mathbf{u}+\\nabla\\mathbf{u}^{T})\\big]"></div>
   <p>with the two links between the lattice and physics:</p>
   <div class="eq" data-tex="p=\\rho\\,c_s^{2}=\\frac{\\rho}{3},\\qquad\\qquad \\nu = c_s^{2}\\Big(\\tau-\\tfrac12\\Big)\\Delta t = \\frac{\\tau-\\tfrac12}{3}"></div>
-  <div class="hint">The <b>−½</b> comes from the Taylor expansion: streaming itself adds a bit of numerical viscosity that τ has to cancel. It also means τ must exceed ½ (viscosity can't be negative). This solver was checked against this exact relation: a Taylor–Green vortex decays at the predicted rate to <b>0.04%</b> (see Validation).</div>
+  <div class="hint">The <b>−½</b> comes from the Taylor expansion: the discrete streaming step lowers the effective viscosity by half a relaxation step, so only the part of τ above ½ counts as physical viscosity. It also means τ must exceed ½ (viscosity can't be negative). This solver was checked against this exact relation: a Taylor–Green vortex decays at the predicted rate to <b>0.04%</b> (see Validation).</div>
 </section>
 
 <section class="step">
@@ -110,8 +110,8 @@ export const MATHS_HTML = /* html */ `
   <div class="num">HONESTY</div>
   <h3>What this simulation is, and is not</h3>
   <ul>
-    <li><b>Is:</b> a real 3D solver of the Navier–Stokes equations (via lattice Boltzmann), checked against exact solutions. The physics trends (lift versus angle, ground effect, wake, vortices) are genuine.</li>
-    <li><b>Is not:</b> wind-tunnel accurate. Cells are 5 cm (car) and 75 cm (A380), so thin wings are 1–2 cells thick and the boundary layer is unresolved. Real Re is 10<sup>4</sup> times higher than the simulated one.</li>
+    <li><b>Is:</b> a real 3D solver of the Navier–Stokes equations (via lattice Boltzmann), checked against exact solutions. The physics trends (lift rising with angle, the wake, vortices, high pressure on the nose and tyres) are genuine.</li>
+    <li><b>Is not:</b> wind-tunnel accurate. Cells are 5 cm (car) and 75 cm (A380), so thin wings are 1–2 cells thick and the boundary layer is unresolved. The real Re is thousands of times higher than the simulated one (about 6,000× for the car, 75,000× for the A380).</li>
     <li><b>No F1 downforce.</b> Real downforce comes from thin wings and a 4 cm floor gap working at Re ≈ 10<sup>7</sup>. Here a wing chord is about 6 cells and the chord Reynolds number is a few hundred, so those surfaces stall and the vertical force comes out near zero. Tested at two resolutions (5 cm and 3.5 cm cells) with the same result, so Re is the limit, not the grid. That is why the F1 panel reports <b>drag and side force</b> (which the solver does capture) and not downforce.</li>
     <li>The F1 floor is <b>free-slip</b> (a rolling road with its boundary layer removed): a moving belt over a one-cell gap pumps air into dead ends on a grid this coarse.</li>
     <li>Incompressible: fine for the car, an approximation for an airliner at Mach 0.85.</li>
