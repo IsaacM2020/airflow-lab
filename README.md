@@ -5,7 +5,7 @@
 **A live 3D wind tunnel in your browser.**
 Real Navier-Stokes fluid physics, solved on your GPU, around an Airbus A380 and a Formula 1 car.
 
-[**Launch the live demo**](__LIVE_URL__) &nbsp;·&nbsp; [How it works](EXPLAINER.md) &nbsp;·&nbsp; [Validation](#how-do-we-know-its-right)
+[**Launch the live demo**](https://airflow-lab.vercel.app) &nbsp;·&nbsp; [How it works](EXPLAINER.md) &nbsp;·&nbsp; [Validation](#how-do-we-know-its-right)
 
 ![WebGPU](https://img.shields.io/badge/WebGPU-compute-5cd6ff) ![Solver](https://img.shields.io/badge/solver-lattice%20Boltzmann%20D3Q19-8f7bff) ![License](https://img.shields.io/badge/code-MIT-5be3a8)
 
